@@ -18,6 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import io.github.emusute1212.usbdebugswitcher.ui.theme.UsbDebugSwitcherTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,7 +31,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Content(contentResolver)
+                    Content()
                 }
             }
         }
@@ -37,9 +39,8 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Content(
-    contentResolver: ContentResolver
-) {
+fun Content() {
+    val context = LocalContext.current
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -49,7 +50,7 @@ fun Content(
         ) {
             Text("UsbDebug: ")
             var usbDebugState: UsbDebugSwitcher.UsbDebug by remember {
-                mutableStateOf(UsbDebugSwitcher.getCurrentValue(contentResolver))
+                mutableStateOf(UsbDebugSwitcher.getCurrentValue(context))
             }
             Switch(
                 checked = when (usbDebugState) {
@@ -57,10 +58,18 @@ fun Content(
                     UsbDebugSwitcher.UsbDebug.Enabled -> true
                 },
                 onCheckedChange = {
-                    UsbDebugSwitcher.switch(contentResolver)
-                    usbDebugState = UsbDebugSwitcher.getCurrentValue(contentResolver)
+                    UsbDebugSwitcher.switch(context)
+                    usbDebugState = UsbDebugSwitcher.getCurrentValue(context)
                 }
             )
         }
+    }
+}
+
+@Preview
+@Composable
+fun PreviewContent() {
+    UsbDebugSwitcherTheme {
+        Content()
     }
 }
