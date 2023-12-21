@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">UsbDebugSwitcher</string>
+    <string name="tile_name">USB Debug</string>
 </resources>

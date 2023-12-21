@@ -1,12 +1,16 @@
 package io.github.emusute1212.usbdebugswitcher
 
-import android.content.ContentResolver
 import android.content.Context
 import android.provider.Settings
 
 object UsbDebugSwitcher {
-    fun isSwitchEnabled(contentResolver: ContentResolver) {
-
+    fun isSwitchEnabled(context: Context): Boolean {
+        return Settings.Global.getInt(
+            context.contentResolver,
+            Settings.Global.DEVELOPMENT_SETTINGS_ENABLED
+        ).let {
+            it == 1
+        }
     }
 
     fun getCurrentValue(context: Context): UsbDebug {
@@ -16,17 +20,13 @@ object UsbDebugSwitcher {
     }
 
     fun switch(
-        context: Context,
-        onChangedValue: (UsbDebug) -> Unit = {}
+        context: Context
     ) {
-        val nextUsbDebug = getCurrentValue(context).nextValue
         Settings.Global.putInt(
             context.contentResolver,
             Settings.Global.ADB_ENABLED,
-            nextUsbDebug.settingsValue
+            getCurrentValue(context).nextValue.settingsValue
         )
-        onChangedValue(nextUsbDebug)
-
     }
 
     sealed interface UsbDebug {
