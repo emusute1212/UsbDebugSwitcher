@@ -1,10 +1,11 @@
 package io.github.emusute1212.usbdebugswitcher
 
-import android.content.ContentResolver
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -41,10 +42,17 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Content() {
     val context = LocalContext.current
-    Box(
+    Column(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Development Statement: ")
+            Text(text = UsbDebugSwitcher.getDevelopmentSettingsEnabledStatement(context).toString())
+        }
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -53,6 +61,7 @@ fun Content() {
                 mutableStateOf(UsbDebugSwitcher.getCurrentValue(context))
             }
             Switch(
+                enabled = UsbDebugSwitcher.isSwitchEnabled(context),
                 checked = when (usbDebugState) {
                     UsbDebugSwitcher.UsbDebug.Disabled -> false
                     UsbDebugSwitcher.UsbDebug.Enabled -> true

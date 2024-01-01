@@ -4,13 +4,16 @@ import android.content.Context
 import android.provider.Settings
 
 object UsbDebugSwitcher {
-    fun isSwitchEnabled(context: Context): Boolean {
+
+    fun getDevelopmentSettingsEnabledStatement(context: Context): Int {
         return Settings.Global.getInt(
             context.contentResolver,
             Settings.Global.DEVELOPMENT_SETTINGS_ENABLED
-        ).let {
-            it == 1
-        }
+        )
+    }
+    fun isSwitchEnabled(context: Context): Boolean {
+        val developmentSettingsEnabledStatement = getDevelopmentSettingsEnabledStatement(context)
+        return developmentSettingsEnabledStatement == 1
     }
 
     fun getCurrentValue(context: Context): UsbDebug {

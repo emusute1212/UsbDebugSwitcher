@@ -17,15 +17,13 @@ class UsbDebugTileService : TileService() {
 
     private fun changeTileState(context: Context) {
         qsTile?.apply {
-            state = when {
-                UsbDebugSwitcher.isSwitchEnabled(context) -> when (UsbDebugSwitcher.getCurrentValue(
-                    context
-                )) {
+            state = if (UsbDebugSwitcher.isSwitchEnabled(context)) {
+                when (UsbDebugSwitcher.getCurrentValue(context)) {
                     UsbDebugSwitcher.UsbDebug.Enabled -> Tile.STATE_ACTIVE
                     UsbDebugSwitcher.UsbDebug.Disabled -> Tile.STATE_INACTIVE
                 }
-
-                else -> Tile.STATE_UNAVAILABLE
+            } else {
+                Tile.STATE_UNAVAILABLE
             }
             updateTile()
         }
